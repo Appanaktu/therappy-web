@@ -144,11 +144,29 @@
 			};
 		</script> -->
 		<h1 id="dbtest"> DB TEST:</h1>
-		<input type "textfield" id="testtext" />
-		<button id="saveButton">Save</button>
-		<button id="loadButton">Load</button>
-		<button id="allButton">Alle Nutzer ausgeben</button>
-		<script src="./firebase.js"></script>
+    <div class="datagrid" id="db-grid">
+			<table id="data-table">
+		    <thead>
+		        <tr>
+			        <th>ID</th>
+			        <th>Vorname</th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <tr id="ID">
+		        	<td id="Vorname"></td>
+		       </tr>
+		   </tbody>
+		 </table>
+	 </div>
+
+	 <div>
+			<input type="textfield" id="testtext"/>
+			<button id="saveButton">Save</button>
+			<button id="loadButton">Load</button>
+			<button id="allButton">Alle Nutzer ausgeben</button>
+			<script src="./firebase.js"></script>
+		</div>
 	</body>
 </html>
 
