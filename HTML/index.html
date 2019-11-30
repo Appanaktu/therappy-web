@@ -8,13 +8,19 @@
 		<link rel="stylesheet" href="static/CSS/button.css" type="text/css">
 		<link rel="stylesheet" href="static/CSS/datagrid.css" type="text/css">
 		<link rel="stylesheet" href="static/CSS/navigation_bar.css" type="text/css">
+<!-- 	<script src="/__/firebase/7.5.0/firebase.js"></script>
+		<script src="/__/firebase/init.js"></script> -->
+     	<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-firestore.js"></script>
+		<script language="JavaScript" type="text/javascript" src="bingo.js"></script>
+
 	</head>
 	<body>
 
 		<!-- Header-Daten -->
 		<!-- TODO: In eigenes Html oder ähnliches auslagen -->
 		<div class="header" style="position:fixed;margin-left:0;left:0;top:0;height:8.3%;">
-				<img src="../static/images/logo_example.png"/>
+				<img src="./static/images/logo_example.png"/>
 		</div>
 
 		<!-- Navigationsbar-Daten -->
@@ -45,7 +51,7 @@
 					<table>
 						<thead>
 							<tr>
-								<th>Therapeut</th>
+								<th>Test2</th>
 								<th>Anzahl Termin</th>
 								<th>Anzahl Therapieformen</th>
 								<th>Anzahl Zeiteinheiten</th>
@@ -79,7 +85,7 @@
 			</div>
 		</div>
 
-		<script type="text/javascript">
+<!-- 		<script type="text/javascript">
 			window.onload = fill_month_list;
 
 			var ml = document.getElementById("month_list");
@@ -136,7 +142,13 @@
 				var current_month_text = current_month.text;
 				console.log(current_month_text);
 			};
-		</script>
+		</script> -->
+		<h1 id="dbtest"> DB TEST:</h1>
+		<input type "textfield" id="testtext" />
+		<button id="saveButton">Save</button>
+		<button id="loadButton">Load</button>
+		<button id="allButton">Alle Nutzer ausgeben</button>
+		<script src="./firebase.js"></script>
 	</body>
 </html>
 
