@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de" dir="ltr">
   <head>
     <meta charset="utf-8">
@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="static/CSS/body.css" type="text/css">
     <link rel="stylesheet" href="static/CSS/button.css" type="text/css">
     <link rel="stylesheet" href="static/CSS/navigation_bar.css" type="text/css">
+    <link rel="stylesheet" href="static/CSS/datagrid.css" type="text/css">
     <script language="JavaScript" type="text/javascript" src="static/javascript/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-firestore.js"></script>
@@ -25,21 +26,8 @@
       <li><a href="index.html">Home</a></li>
     </ul>
 
-    <h1 id="dbtest"> DB TEST:</h1>
+    <h1 id="dbtest">Nutzer:</h1>
     <div class="datagrid" id="db-grid">
-      <table id="data-table">
-        <thead>
-            <tr>
-              <th>ID</th>
-              <th>Vorname</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr id="ID">
-              <td id="Vorname"></td>
-           </tr>
-       </tbody>
-     </table>
    </div>
 
    <div>
@@ -49,11 +37,59 @@
       <button onclick=get_all()>Alle Nutzer ausgeben</button>
       <button onclick=load_doc()>Lade DokumentenID</button>
     </div>
-    
+
     <script type="text/javascript">
+      window.onload =setTimeout(function() { get_all_docs_from_collection("Nutzer", fill_data_table); }, 50);
+      function fill_data_table(querySnapshot){
+
+        var data_table = document.getElementById("db-grid");
+
+        // Löschen des alten Tabelleninhalts
+        while (data_table.firstChild) {
+          data_table.removeChild(data_table.firstChild);
+        }
+
+        var table = document.createElement("TABLE");
+        var table_head = document.createElement("THEAD")
+        var table_body = document.createElement("TBODY")
+
+        // Tabellenspalten
+        var tr = document.createElement("TR");
+        table_head.appendChild(tr);
+        var th = document.createElement("TH");
+        th.appendChild(document.createTextNode("ID"));
+        tr.appendChild(th);
+        var fields = Object.keys(querySnapshot.docs[0].data())
+        for (i = 0; i < fields.length; i++) {
+            var th = document.createElement("TH");
+            th.appendChild(document.createTextNode(fields[i]));
+            tr.appendChild(th);
+        };
+
+        // Tabelleninhalt
+        querySnapshot.forEach(function(doc) {
+          var tr = document.createElement("TR");
+          table_body.appendChild(tr);
+          var td = document.createElement("TD");
+          td.appendChild(document.createTextNode(doc.id));
+          tr.appendChild(td);
+          for (i = 0; i < fields.length; i++) {
+            var td = document.createElement("TD");
+            console.log(fields[i]);
+            td.appendChild(document.createTextNode(doc.data()[fields[i]]));
+            tr.appendChild(td);
+          };
+        });
+
+        table.appendChild(table_head);
+        table.appendChild(table_body);
+        data_table.appendChild(table);
+      };
+
       function save_user(){
         textToSave = document.getElementById("testtext").value
         write_json_to_collection("Nutzer",null,{ Vorname: textToSave });
+        get_all_docs_from_collection("Nutzer", fill_data_table)
       };
 
       function load_by_name(){
@@ -66,10 +102,9 @@
         get_json_from_collection_by_doc("Nutzer", docIDToLoad)
       };
 
-      function get_all(){
-        get_all_docs_from_collection("Nutzer")
+      async function get_all(){
+        get_all_docs_from_collection("Nutzer", fill_data_table)
       };
-
     </script>
   </body>
 </html>

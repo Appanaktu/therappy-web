@@ -12,10 +12,15 @@ var config = {
 
 var db = ""
 //Wenn Website geladen
-document.addEventListener("DOMContentLoaded", function() {
-	firebase.initializeApp(config);
-	db = firebase.firestore();
-});
+document.onreadystatechange = function() {
+  if (document.readyState === 'complete')
+    {
+        firebase.initializeApp(config);
+        db = firebase.firestore();
+        while(db==""){
+        }
+    };
+};
 
 // Schreib-Funktion
 function write_json_to_collection(collection_name, document_name, values) {
@@ -40,18 +45,24 @@ function write_json_to_collection(collection_name, document_name, values) {
 };
 
 // Lese-Funktionen
-function get_all_docs_from_collection(collection_name){
+async function get_all_docs_from_collection(collection_name, callback_function) {
 
   // Hole Collectionreferenz
   var collectionRef = db.collection(collection_name)
+
+  // Rueckgabeobjekt
+  var docs = new Array()
 
   // Lesezugriff
   collectionRef.get().then(function(querySnapshot) {
     querySnapshot.forEach(function(doc) {
         // doc.data() is never undefined for query doc snapshots
         console.log(doc.id, " => ", doc.data());
+        docs.push([doc.id, doc.data()]);
     });
+    callback_function(querySnapshot);
   });
+  return docs;
 };
 
 function get_json_from_collection_by_query(collection_name, trait, operator, value) {
@@ -67,6 +78,7 @@ function get_json_from_collection_by_query(collection_name, trait, operator, val
             // doc.data() is never undefined for query doc snapshots
             console.log(doc.id, " => ", doc.data());
         });
+        return querySnapshot;
     })
     .catch(function(error) {
         console.log("Error getting documents: ", error);
@@ -85,6 +97,7 @@ function get_json_from_collection_by_doc(collection_name, document_name) {;
   docRef.get().then(function(doc) {
     if (doc.exists) {
         console.log("Document data:", doc.data());
+        return doc;
     } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
