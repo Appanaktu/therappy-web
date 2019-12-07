@@ -44,16 +44,30 @@
 
    <div>
       <input type="textfield" id="testtext"/>
-      <button id="saveButton">Save</button>
-      <button id="loadButton">Load</button>
-      <button id="allButton">Alle Nutzer ausgeben</button>
+      <button onclick=save_user()>Save</button>
+      <button onclick=load_by_name()>Load Name</button>
+      <button onclick=get_all()>Alle Nutzer ausgeben</button>
+      <button onclick=load_doc()>Lade DokumentenID</button>
     </div>
+    
     <script type="text/javascript">
-      document.addEventListener("DOMContentLoaded", function() {
-        var allButton = document.querySelector("#allButton");
-        allButton.addEventListener("click", function() {
-          get_all_docs_from_collection("Nutzer");
-        };
+      function save_user(){
+        textToSave = document.getElementById("testtext").value
+        write_json_to_collection("Nutzer",null,{ Vorname: textToSave });
+      };
+
+      function load_by_name(){
+        textToLoad = document.getElementById("testtext").value
+        get_json_from_collection_by_query("Nutzer", "Vorname", "==", textToLoad)
+      };
+
+      function load_doc(){
+        docIDToLoad = document.getElementById("testtext").value
+        get_json_from_collection_by_doc("Nutzer", docIDToLoad)
+      };
+
+      function get_all(){
+        get_all_docs_from_collection("Nutzer")
       };
 
     </script>

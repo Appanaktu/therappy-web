@@ -10,9 +10,12 @@ var config = {
   "storageBucket": "iamphysiotherappy-17757.appspot.com"
 };
 
-// Initialisiere Datenank
-firebase.initializeApp(config);
-var db = firebase.firestore()
+var db = ""
+//Wenn Website geladen
+document.addEventListener("DOMContentLoaded", function() {
+	firebase.initializeApp(config);
+	db = firebase.firestore();
+});
 
 // Schreib-Funktion
 function write_json_to_collection(collection_name, document_name, values) {
@@ -21,7 +24,7 @@ function write_json_to_collection(collection_name, document_name, values) {
   var collectionRef = db.collection(collection_name)
 
   // Schreibzugriff
-  if document_name == null{
+  if ( document_name == null ) {
     collectionRef.add(values).then(function(docRef) {
         console.log("Werte gespeichert unter der ID: ", docRef.id);
     }).catch(function(error) {
@@ -48,7 +51,7 @@ function get_all_docs_from_collection(collection_name){
         // doc.data() is never undefined for query doc snapshots
         console.log(doc.id, " => ", doc.data());
     });
-});
+  });
 };
 
 function get_json_from_collection_by_query(collection_name, trait, operator, value) {
@@ -90,54 +93,3 @@ function get_json_from_collection_by_doc(collection_name, document_name) {;
     console.log("Error getting document:", error);
   });
 };
-
-//Wenn Website geladen
-document.addEventListener("DOMContentLoaded", function() {
-	firebase.initializeApp(config);
-	var db = firebase.firestore();
-	const inputTextField = document.querySelector("#testtext");
-  const outputHeader = document.querySelector("#dbtest");
-	const saveButton = document.querySelector("#saveButton");
-  const loadButton = document.querySelector("#loadButton");
-  const allButton = document.querySelector("#allButton");
-  const docRef = db.doc("Nutzer/Person");
-
-  //In DB speichern
-	saveButton.addEventListener("click", function() {
-		const textToSave = inputTextField.value;
-		console.log("Folgender Name wird gespeichert " + textToSave);
-		db.collection("Nutzer").add({
-        Vorname: textToSave,
-    }).then(function(docRef) {
-        console.log("Name gespeichert mit ID: ", docRef.id);
-    }).catch(function(error) {
-        console.error("Error adding document: ", error);
-    });
-	});
-
-  //Von DB laden
-  loadButton.addEventListener("click", function() {
-    const textToLoad = inputTextField.value;
-    console.log("Folgender Text wird geladen " + textToLoad);
-    db.collection("Nutzer").where("Vorname", "==", textToLoad)
-      .get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-        });
-    }).catch(function(error) {
-      console.log("Fehler: ", error);
-    });
-  });
-
-  // ALle Einträge ausgeben erstmal in Konsole
-  // allButton.addEventListener("click", function() {
-  //   db.collection("Nutzer").get().then(function(querySnapshot) {
-  //       querySnapshot.forEach(function(doc) {
-  //           // doc.data() is never undefined for query doc snapshots
-  //           console.log(doc.id, " => ", doc.data());
-  //       });
-  //   });
-  });
-});
